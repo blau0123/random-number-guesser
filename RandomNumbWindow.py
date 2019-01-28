@@ -1,5 +1,6 @@
 import sys
-from PyQt5.QtWidgets import (QDesktopWidget, QWidget, QToolTip, QPushButton, QApplication)
+from PyQt5.QtWidgets import (QDesktopWidget, QWidget, QToolTip, QPushButton,
+                             QHBoxLayout, QVBoxLayout, QGridLayout, QApplication)
 from PyQt5.QtGui import QIcon, QFont
 # import RandomNumb.py
 
@@ -12,15 +13,28 @@ class RandomNumb(QWidget):
     def initUI(self):
         QToolTip.setFont(QFont('TimesNewRoman', 10))
 
-        # creates a button that the user will use to submit guess
-        submit = QPushButton('Submit', self)
-        submit.setToolTip('This will submit your guess')
-        submit.resize(submit.sizeHint())
-        submit.move(350, 500)
+        # create grid layout for buttons
+        grid = QGridLayout()
+        # create a 2d arr that holds all widgets for each grid space
+        btns = ['', '', '', '',
+                '', '', '', '',
+                '', '', '', '',
+                '', '', '', '',
+                'New Number', 'Submit', 'Quit']
+        # sets a var that holds the (j, i) posits on btns 2d arr
+        positions = [(i, j) for i in range(5) for j in range(4)]
+
+        # for each posit in btns, insert the btn specified in btns
+        for position, btn in zip(positions, btns):
+            if btn == '':
+                continue
+            tempbut = QPushButton(btn)
+            grid.addWidget(tempbut, *position)
 
         # creates the window properties
-        self.resize(700, 700)
+        # self.resize(700, 700)
         self.center()
+        self.setLayout(grid)
 
         self.setWindowTitle('Random Number Guesser')
         self.show()

@@ -1,7 +1,8 @@
 import sys
 from PyQt5.QtWidgets import (QDesktopWidget, QWidget, QToolTip, QPushButton,
-                             QHBoxLayout, QVBoxLayout, QGridLayout, QApplication)
+                             QLabel, QGridLayout, QApplication, QVBoxLayout)
 from PyQt5.QtGui import QIcon, QFont
+from PyQt5.QtCore import Qt
 # import RandomNumb.py
 
 
@@ -13,31 +14,38 @@ class RandomNumb(QWidget):
     def initUI(self):
         QToolTip.setFont(QFont('TimesNewRoman', 10))
 
-        # create grid layout for buttons
+        # create grid layout with all widgets
         grid = QGridLayout()
-        # create a 2d arr that holds all widgets for each grid space
-        btns = ['', '', '', '',
-                '', '', '', '',
-                '', '', '', '',
-                '', '', '', '',
-                'New Number', 'Submit', 'Quit']
-        # sets a var that holds the (j, i) posits on btns 2d arr
-        positions = [(i, j) for i in range(5) for j in range(4)]
 
-        # for each posit in btns, insert the btn specified in btns
-        for position, btn in zip(positions, btns):
-            if btn == '':
-                continue
-            tempbut = QPushButton(btn)
-            grid.addWidget(tempbut, *position)
+        # create three buttons
+        submitbtn = QPushButton('Submit')
+        newnumbbtn = QPushButton('New Number')
+        quitbtn = QPushButton('Quit')
+        grid.addWidget(newnumbbtn, 1, 0)
+        grid.addWidget(submitbtn, 1, 1)
+        grid.addWidget(quitbtn, 1, 2)
+
+        # create a label that will give info to the user about the game & put in posit (0, 1(
+        self.infolabel = QLabel('I have a number in my head. Try to guess it!', self)
+        grid.addWidget(self.infolabel, 0, 1, Qt.AlignTop)
+
+        newnumbbtn.clicked.connect(self.newNumbClicked)
 
         # creates the window properties
-        # self.resize(700, 700)
         self.center()
         self.setLayout(grid)
 
         self.setWindowTitle('Random Number Guesser')
         self.show()
+
+    # if the user wants a new number
+    def newNumbClicked(self):
+        sender = self.sender()
+        self.infolabel.setText('Fine, here\'s a new number. Now guess')
+
+    # if the user wants to quit
+    def quitClicked(self):
+        # closes app
 
     # centers the window in the middle of the screen
     def center(self):
